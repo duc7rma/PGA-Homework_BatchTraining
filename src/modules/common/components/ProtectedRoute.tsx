@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, Route, RouteProps } from 'react-router-dom';
+import { Redirect, Route, RouteProps } from 'react-router-dom';
 import { ROUTES } from 'configs/routes';
 import Cookies from 'js-cookie';
 import { ACCESS_TOKEN_KEY } from 'utils/constants';
@@ -15,7 +15,7 @@ const ProtectedRoute = (props: Props) => {
   }
 
   return (
-    <Navigate
+    <Redirect
       to={{
         pathname: ROUTES.login,
       }}

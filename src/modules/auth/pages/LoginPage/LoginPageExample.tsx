@@ -30,6 +30,8 @@ const LoginPage = () => {
         fetchThunk(API_PATHS.signIn, 'post', { email: values.email, password: values.password }),
       );
 
+      console.log(json.data);
+
       setLoading(false);
 
       if (json?.code === RESPONSE_STATUS_SUCCESS) {

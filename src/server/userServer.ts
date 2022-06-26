@@ -1,4 +1,5 @@
 import axios from "axios";
+import { IUser } from "models/user";
 import {urlLoginAPI, urlSignUpLocationAPI, urlRegisterAPI} from '../utils/constants'
 import { ISignUpParams } from './../models/auth';
 
@@ -6,7 +7,7 @@ interface IAPIRes {
     message: string;
     error: boolean;
     code: number;
-    data: object;
+    data: IUser;
 }
 
 interface ISignUpLocationsAPIRes {

@@ -3,4 +3,6 @@ export const ROUTES = {
   home: '/home',
   contact: '/contact',
   signUp:'/sign-up',
+  profile: '/profile',
+  detail: '/detail-page',
 };

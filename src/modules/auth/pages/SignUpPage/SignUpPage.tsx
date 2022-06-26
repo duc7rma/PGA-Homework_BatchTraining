@@ -6,15 +6,25 @@ import { ISignUpParams } from 'models/auth';
 import { handleSignUpLocationsAPI, handleRegisterAPI } from 'server/userServer';
 import './SignUpPage.css';
 import { RESPONSE_STATUS_SUCCESS } from 'utils/httpResponseCode';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { ROUTES } from 'configs/routes';
 import { getErrorMessageResponse } from 'utils';
+import { useDispatch } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+import { AppState } from 'redux/reducer';
+import { Action } from 'redux';
+import { setUserInfo } from 'modules/auth/redux/authReducer';
+import Cookies from 'js-cookie';
+import { replace } from 'connected-react-router';
+import { ACCESS_TOKEN_KEY } from 'utils/constants';
 
 function SigUpPage() {
+  const dispatch = useDispatch<ThunkDispatch<AppState, null, Action<string>>>();
+
   const [isLoading, setLoading] = useState(false);
   const [locations, setLocations] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const getLocation = useCallback(async () => {
     setLoading(true);
@@ -35,20 +45,21 @@ function SigUpPage() {
     setErrorMessage('');
     setLoading(true);
 
-    const res = await handleRegisterAPI(values);
+    const json = await handleRegisterAPI(values);
 
     setLoading(false);
-    console.log(res);
 
-    if (res.code === RESPONSE_STATUS_SUCCESS) {
-      console.log(res.data);
+    if (json.code === RESPONSE_STATUS_SUCCESS) {
       alert('Chúc mừng bạn đã đăng ký thành công!');
-      navigate(ROUTES.login);
+      dispatch(setUserInfo(json.data));
+      Cookies.set(ACCESS_TOKEN_KEY, json.data.token);
+      dispatch(replace(ROUTES.login));
+      // navigate(ROUTES.login);
       return;
     }
 
-    if (res?.error) {
-      setErrorMessage(getErrorMessageResponse(res));
+    if (json?.error) {
+      setErrorMessage(getErrorMessageResponse(json));
     }
   };
 
